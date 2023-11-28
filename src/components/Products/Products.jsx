@@ -9,7 +9,7 @@ const Products = () => {
   const { buyProducts } = useContext(dataContext);
 
   useEffect(() => {
-    axios("data.json").then((res) => setData(res.data));
+    axios.get("http://localhost:8080/products").then((res) => setData(res.data));
   }, []);
 
   return data.map((product) => {

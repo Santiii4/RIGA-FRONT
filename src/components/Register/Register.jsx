@@ -1,38 +1,91 @@
-import "./Register.css"
-import riga from "../../multimedia/riga.png";
-import {Link} from 'react-router-dom'
+import React, { useState } from 'react';
+import './Register.css'; // Asegúrate de que el nombre del archivo CSS sea correcto
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default function Register () {
-    return(
-        <body>
-            <div class="container1">
-            <div class="wrapper">
-                <div class="title"><span>Register</span></div>
-                    <form action="#">
-                        <div class="row">
-                            <i class="fas fa-user"></i>
-                            <input type="email" placeholder="Email" required/>
-                        </div>
-                        <div class="row">
-                            <i class="fas fa-user"></i>
-                            <input type="username" placeholder="Username" required/>
-                        </div>
-                        <div class="row">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" required/>
-                        </div>
-                        <div class="row">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" placeholder="Repeat Password" required/>
-                        </div>
-                        <div class="row button">
-                            <input type="submit" value="Register"/>
-                        </div>
-                        <div class="signup-link">Are you a member? <Link to= '/Login'>Signin now</Link></div>
-                    </form>
-                </div>
+const Register = () => {
+  const [usuario, setUsuario] = useState({
+    email: '',
+    nombre: '', 
+    contraseña: '',
+    confirmPassword: '',
+  });
+
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/registrarse', usuario);
+      console.log(response.data);
+      window.alert('Usuario registrado correctamente');
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      window.alert('Las contraseñas no coinciden');
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUsuario((prevUsuario) => ({ ...prevUsuario, [name]: value }));
+  };
+
+  return (
+    <body>
+      <div className="container1">
+        <div className="wrapper">
+          <div className="title">
+            <span>Register</span>
+          </div>
+          <form action="#">
+            <div className="row">
+              <i className="fas fa-user"></i>
+              <input
+                type="email"
+                placeholder="Email"
+                name="email"
+                onChange={handleChange}
+                required
+              />
             </div>
-        </body>
+            <div className="row">
+              <i className="fas fa-user"></i>
+              <input
+                type="text"
+                placeholder="Username"
+                name="nombre"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="row">
+              <i className="fas fa-lock"></i>
+              <input
+                type="password"
+                placeholder="Password"
+                name="contraseña"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="row">
+              <i className="fas fa-lock"></i>
+              <input
+                type="password"
+                placeholder="Repeat Password"
+                name="confirmPassword"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="row button">
+              <input type="button" value="Register" onClick={handleRegister} />
+            </div>
+            <div className="signup-link">
+              ¿Ya eres miembro? <Link to="/Login">Inicia sesión ahora</Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </body>
+  );
+};
 
-    )
-}
+export default Register;
